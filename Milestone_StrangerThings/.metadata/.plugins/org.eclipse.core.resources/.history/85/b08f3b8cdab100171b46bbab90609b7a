@@ -1,0 +1,92 @@
+#include <msp430.h> 
+
+volatile int count = 0;
+volatile int BitRX = 0;
+
+void main(void)
+{
+    WDTCTL = WDTPW | WDTHOLD;   // stop watchdog timer
+
+
+    //Setting up UART connection through pins 3.3 and 3.4
+    P3SEL    |=  0x04;      // UART Transmission
+    P3SEL    |=  0x08;      // UART Receiving
+    UCA0CTL1 |=  UCSWRST;   // Put eUSCI in reset
+    UCA0CTL1 |=  UCSSEL_2;  // SMCLK
+    UCA0BR0   =  6;         // 9600 Baud Rate
+    UCA0BR1   =  0;         // 9600 Baud Rate
+    UCA0MCTL |=  UCBRS_0;   // Modulation
+    UCA0MCTL |=  UCBRF_13;  // Modulation
+    UCA0MCTL |=  UCOS16;    // Modulation
+    UCA0CTL1 &= ~UCSWRST;   // Initialize eUSCI
+    UCA0IE |= UCRXIE; // Enables USCI_A0 RX Interrupt
+
+    //Initialize LEDs for pwm
+    P1DIR |= 0x0D;  //LEDs set as output
+    P1SEL |= 0x0D;  //LEDs set to TA0.1/2/3
+
+    char greeting[20] = "Please Start Typing:";
+    while(greeting[i]!='\0')
+        {
+            while (!(UCA0IFG&UCTXIFG));           // USCI_A0 TX buffer ready?
+            {
+                UCA0TXBUF = greeting[i]+ 0x00;                  // TX -> RXed character
+                i++;
+            }
+        }
+
+    //Set up CCRs for clock count and pwm control
+    TA0CCR0  = 0x00FF;
+    TA0CCTL1 = OUTMOD_7;
+    TA0CCR1 = 0;
+    TA0CCTL2 = OUTMOD_7;
+    TA0CCR2  = 0;
+    TA0CCTL3 = OUTMOD_7;
+    TA0CCR3 = 0;
+    TA0CTL = TASSEL_2 + MC_1 + ID_3;
+}
+
+#pragma vector=USCI_A0_VECTOR
+__interrupt void USCI_A0_ISR(void){
+
+    switch(__even_in_range(UCA0IV,USCI_UCTXIFG)){
+
+    case USCI_NONE: break;
+
+    case USCI_UCRXIFG:
+        switch (count){
+
+            case 0:
+                while(!(UCA0IFG & UCTXIFG));
+                BitRX = UCA0TXBUF;
+                UCA0TXBUF = UCA0RXBUF - 3;
+                __no_operation();
+                break;
+
+            case 1:
+                TA0CCR1 = (UCA0RXBUF);
+                break;
+
+            case 2 :
+                TA0CCR2 = (UCA0RXBUF);
+                break;
+
+            case 3 :
+                TA0CCR3 = (UCA0RXBUF);
+                 break;
+
+            default:
+                while(!(UCA0IFG & UCTXIFG));
+                UCA0TXBUF = UCA0RXBUF;
+        }
+
+        if(count != BitRX){
+            count += 1;
+         } else if (count == BitRX){
+            __delay_cycles(1000);
+                    }
+            break;
+         case USCI_UCTXIFG : break;
+         default: break;
+            }
+        }

@@ -1,0 +1,32 @@
+
+**** Build of configuration Debug for project Milestone1 ****
+
+"C:\\ti\\ccsv7\\utils\\bin\\gmake" -k -j 4 all -O 
+'Building file: ../main.c'
+'Invoking: MSP430 Compiler'
+"C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/bin/cl430" -vmspx --data_model=restricted --use_hw_mpy=F5 --include_path="C:/ti/ccsv7/ccs_base/msp430/include" --include_path="C:/Users/baseb_000/Desktop/Embeded Labs/milestone-1-communicating-with-will-byers-alex-and-sean/Milestone_StrangerThings/Milestone1" --include_path="C:/ti/ccsv7/tools/compiler/ti-cgt-msp430_16.9.4.LTS/include" --advice:power=all --advice:hw_config=all --define=__MSP430FR5994__ --define=_MPU_ENABLE -g --printf_support=minimal --diag_warning=225 --diag_wrap=off --display_error_number --silicon_errata=CPU21 --silicon_errata=CPU22 --silicon_errata=CPU40 --preproc_with_compile --preproc_dependency="main.d_raw"  "../main.c"
+
+>> Compilation failure
+subdir_rules.mk:9: recipe for target 'main.obj' failed
+"../main.c", line 14: error #20: identifier "DCOCTL" is undefined
+"../main.c", line 15: error #20: identifier "BCSCTL1" is undefined
+"../main.c", line 15: error #20: identifier "CALBC1_1MHZ" is undefined
+"../main.c", line 16: error #20: identifier "CALDCO_1MHZ" is undefined
+"../main.c", line 19: error #20: identifier "P1SEL" is undefined
+"../main.c", line 20: error #20: identifier "P1SEL2" is undefined
+"../main.c", line 27: error #20: identifier "UCA0MCTL" is undefined
+"../main.c", line 27: error #20: identifier "UCBRS_1" is undefined
+"../main.c", line 29: error #20: identifier "UC0IE" is undefined
+"../main.c", line 29: error #20: identifier "UCA0RXIE" is undefined
+"../main.c", line 34: remark #1527-D: (ULP 2.1) Detected SW delay loop using empty loop. Recommend using a timer module instead
+"../main.c", line 38: warning #2580-D: pragma vector= accepts numeric arguments or "unused_interrupts" but not USCIAB0TX_VECTOR
+"../main.c", line 44: error #20: identifier "UC0IE" is undefined
+"../main.c", line 44: error #20: identifier "UCA0TXIE" is undefined
+"../main.c", line 47: warning #2580-D: pragma vector= accepts numeric arguments or "unused_interrupts" but not USCIAB0RX_VECTOR
+"../main.c", line 54: error #20: identifier "UC0IE" is undefined
+"../main.c", line 54: error #20: identifier "UCA0TXIE" is undefined
+14 errors detected in the compilation of "../main.c".
+gmake: *** [main.obj] Error 1
+gmake: Target 'all' not remade because of errors.
+
+**** Build Finished ****
