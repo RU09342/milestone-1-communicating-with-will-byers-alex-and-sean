@@ -20,20 +20,29 @@ int main(void)
                                               // over sampling
     UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
     UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
-
+    /*
+    P3SEL |= BIT3+BIT4;                       // P3.3,4 = USCI_A0 TXD/RXD
+    UCA0CTL1 |= UCSWRST;                      // **Put state machine in reset**
+    UCA0CTL1 |= UCSSEL_2;                     // SMCLK
+    UCA0BR0 = 6;                              // 1MHz 115200 (see User's Guide)
+    UCA0BR1 = 0;                              // 1MHz 115200
+    UCA0MCTL |= UCBRS_1 + UCBRF_0;            // Modulation UCBRSx=1, UCBRFx=0
+    UCA0CTL1 &= ~UCSWRST;                     // **Initialize USCI state machine**
+    UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
+*/
     //Initialize LEDs for pwm
-    P1DIR |= 0x0E;  //LEDs set as output
-    P1SEL |= 0x0E;  //LEDs set to TA0.1/2/3
+        P1DIR |= 0x0D;  //LEDs set as output
+        P1SEL |= 0x0D;  //LEDs set to TA0.1/2/3
 
     //Set up CCRs for clock count and pwm control
-    TA0CCR0  = 0x00FF;		//After timerA counts to 255 reset
-    TA0CCTL1 = OUTMOD_7;	//Put Capture Control 1 in set and reset mode
-    TA0CCR1 = 0;			//Initialize Capture Control Register 1 to 0
-    TA0CCTL2 = OUTMOD_7;	//Put Capture Control 2 in set and reset mode
-    TA0CCR2  = 0;			//Initialize Capture Control Register 2 to 0
-    TA0CCTL3 = OUTMOD_7;	//Put Capture Control 3 in set and reset mode
-    TA0CCR3 = 0;			//Initialize Capture Control Register 3 to 0
-    TA0CTL = TASSEL_2 + MC_1 + ID_3;	//TimerA uses SMCLK, with divider of 8, in count up mode
+        TA0CCR0  = 0x00FF;
+        TA0CCTL1 = OUTMOD_7;
+        TA0CCR1 = 0;
+        TA0CCTL2 = OUTMOD_7;
+        TA0CCR2  = 0;
+        TA0CCTL3 = OUTMOD_7;
+        TA0CCR3 = 0;
+        TA0CTL = TASSEL_2 + MC_1 + ID_3;
     __bis_SR_register(LPM0_bits + GIE);       // Enter LPM0, interrupts enabled
     __no_operation();                         // For debugger
 
