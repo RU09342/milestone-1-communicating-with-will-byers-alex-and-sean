@@ -22,8 +22,8 @@ int main(void)
     UCA0IE |= UCRXIE;                         // Enable USCI_A0 RX interrupt
 
     //Initialize LEDs for pwm
-    P1DIR |= 0x1C;  //LEDs set as output
-    P1SEL |= 0x1C;  //LEDs set to TA0.1/2/3
+    P1DIR |= 0x0E;  //LEDs set as output
+    P1SEL |= 0x0E;  //LEDs set to TA0.1/2/3
 
     //Set up CCRs for clock count and pwm control
     TA0CCR0  = 0x00FF;		//After timerA counts to 255 reset
